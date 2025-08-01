@@ -1,168 +1,131 @@
 'use client'
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+import { useState, useEffect } from 'react'
 import { apiService } from '@/lib/api'
-import { logApiError, getErrorMessage } from '@/lib/utils'
-import { useToast } from '@/hooks/use-toast'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { get_text } from '@/lib/i18n'
+
+interface HealthStatus {
+  status: 'healthy' | 'unhealthy' | 'checking'
+  timestamp: string
+  baseUrl: string
+  error?: string
+}
 
 export default function ApiDebugger() {
-  const [isLoading, setIsLoading] = useState(false)
-  const [healthStatus, setHealthStatus] = useState<any>(null)
-  const [testResults, setTestResults] = useState<any[]>([])
-  const { toast } = useToast()
+  const [healthStatus, setHealthStatus] = useState<HealthStatus>({
+    status: 'checking',
+    timestamp: new Date().toISOString(),
+    baseUrl: ''
+  })
+  const [isChecking, setIsChecking] = useState(false)
 
-  const runHealthCheck = async () => {
-    setIsLoading(true)
+  const checkHealth = async () => {
+    setIsChecking(true)
     try {
       const result = await apiService.healthCheck()
-      setHealthStatus(result)
-      
-      if (result.status === 'healthy') {
-        toast({
-          title: "✅ API is healthy",
-          description: `Connected to ${result.baseUrl}`,
-        })
-      } else {
-        toast({
-          title: "❌ API is unhealthy",
-          description: "Check server connection",
-          variant: "destructive"
-        })
-      }
+      setHealthStatus({
+        status: result.status as 'healthy' | 'unhealthy',
+        timestamp: result.timestamp,
+        baseUrl: result.baseUrl
+      })
     } catch (error: any) {
-      logApiError(error, 'Health Check')
-      toast({
-        title: "❌ Health check failed",
-        description: getErrorMessage(error),
-        variant: "destructive"
+      setHealthStatus({
+        status: 'unhealthy',
+        timestamp: new Date().toISOString(),
+        baseUrl: 'Unknown',
+        error: error.message
       })
     } finally {
-      setIsLoading(false)
+      setIsChecking(false)
     }
   }
 
-  const testBotSettings = async () => {
-    setIsLoading(true)
-    try {
-      const result = await apiService.getBotSettings()
-      setTestResults(prev => [...prev, {
-        test: 'Bot Settings',
-        status: 'success',
-        data: result,
-        timestamp: new Date().toISOString()
-      }])
-      toast({
-        title: "✅ Bot settings test passed",
-        description: "Successfully retrieved bot settings",
-      })
-    } catch (error: any) {
-      logApiError(error, 'Bot Settings Test')
-      setTestResults(prev => [...prev, {
-        test: 'Bot Settings',
-        status: 'error',
-        error: getErrorMessage(error),
-        timestamp: new Date().toISOString()
-      }])
-      toast({
-        title: "❌ Bot settings test failed",
-        description: getErrorMessage(error),
-        variant: "destructive"
-      })
-    } finally {
-      setIsLoading(false)
+  useEffect(() => {
+    checkHealth()
+  }, [])
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'healthy':
+        return 'bg-green-500'
+      case 'unhealthy':
+        return 'bg-red-500'
+      default:
+        return 'bg-yellow-500'
     }
   }
 
-  const clearResults = () => {
-    setTestResults([])
-    setHealthStatus(null)
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'healthy':
+        return '✅ Server bilan bog\'lanish muvaffaqiyatli'
+      case 'unhealthy':
+        return '❌ Server bilan bog\'lanishda muammo'
+      default:
+        return '⏳ Tekshirilmoqda...'
+    }
   }
 
   return (
-    <Card className="w-full max-w-2xl">
+    <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           🔧 API Debugger
         </CardTitle>
-        <CardDescription>
-          Test API connectivity and endpoints
-        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="flex gap-2">
-          <Button 
-            onClick={runHealthCheck} 
-            disabled={isLoading}
-            variant="outline"
-          >
-            {isLoading ? 'Testing...' : '🏥 Health Check'}
-          </Button>
-          <Button 
-            onClick={testBotSettings} 
-            disabled={isLoading}
-            variant="outline"
-          >
-            {isLoading ? 'Testing...' : '🤖 Test Bot Settings'}
-          </Button>
-          <Button 
-            onClick={clearResults} 
-            variant="outline"
-            size="sm"
-          >
-            🗑️ Clear
-          </Button>
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-medium">Holat:</span>
+          <Badge className={getStatusColor(healthStatus.status)}>
+            {getStatusText(healthStatus.status)}
+          </Badge>
         </div>
 
-        {healthStatus && (
-          <div className="space-y-2">
-            <h4 className="font-medium">Health Status:</h4>
-            <div className="text-sm space-y-1">
-              <div className="flex items-center gap-2">
-                <span>Status:</span>
-                <Badge variant={healthStatus.status === 'healthy' ? 'default' : 'destructive'}>
-                  {healthStatus.status}
-                </Badge>
-              </div>
-              <div>Base URL: {healthStatus.baseUrl}</div>
-              <div>Timestamp: {healthStatus.timestamp}</div>
+        <div className="space-y-2">
+          <div className="text-sm">
+            <span className="font-medium">API URL:</span>
+            <div className="mt-1 p-2 bg-gray-100 rounded text-xs break-all">
+              {healthStatus.baseUrl || 'Loading...'}
             </div>
           </div>
-        )}
 
-        {testResults.length > 0 && (
-          <div className="space-y-2">
-            <h4 className="font-medium">Test Results:</h4>
-            <div className="space-y-2 max-h-64 overflow-y-auto">
-              {testResults.map((result, index) => (
-                <div key={index} className="border rounded p-2 text-sm">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="font-medium">{result.test}:</span>
-                    <Badge variant={result.status === 'success' ? 'default' : 'destructive'}>
-                      {result.status}
-                    </Badge>
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    {result.timestamp}
-                  </div>
-                  {result.error && (
-                    <div className="text-red-600 mt-1">{result.error}</div>
-                  )}
-                  {result.data && (
-                    <details className="mt-1">
-                      <summary className="cursor-pointer text-xs">View Data</summary>
-                      <pre className="text-xs mt-1 bg-muted p-2 rounded overflow-x-auto">
-                        {JSON.stringify(result.data, null, 2)}
-                      </pre>
-                    </details>
-                  )}
-                </div>
-              ))}
+          <div className="text-sm">
+            <span className="font-medium">Vaqt:</span>
+            <div className="mt-1 text-gray-600">
+              {new Date(healthStatus.timestamp).toLocaleString()}
             </div>
           </div>
-        )}
+
+          {healthStatus.error && (
+            <Alert className="mt-4">
+              <AlertDescription className="text-xs">
+                <strong>Xatolik:</strong> {healthStatus.error}
+              </AlertDescription>
+            </Alert>
+          )}
+        </div>
+
+        <Button 
+          onClick={checkHealth} 
+          disabled={isChecking}
+          className="w-full"
+        >
+          {isChecking ? '🔄 Tekshirilmoqda...' : '🔄 Qayta tekshirish'}
+        </Button>
+
+        <div className="text-xs text-gray-500 space-y-1">
+          <p>💡 Maslahatlar:</p>
+          <ul className="list-disc list-inside space-y-1">
+            <li>Django server ishlayotganini tekshiring</li>
+            <li>Environment variable sozlamalarini tekshiring</li>
+            <li>CORS sozlamalarini tekshiring</li>
+            <li>Firewall sozlamalarini tekshiring</li>
+          </ul>
+        </div>
       </CardContent>
     </Card>
   )
