@@ -40,9 +40,29 @@ export default function LoginPage() {
       router.push("/dashboard")
     } catch (error: any) {
       console.error('Login error:', error)
+      
+      // Handle specific error cases
+      let errorMessage = t("loginError")
+      
+      if (error.response?.status === 400) {
+        if (error.response?.data?.non_field_errors) {
+          errorMessage = error.response.data.non_field_errors[0]
+        } else if (error.response?.data?.message) {
+          errorMessage = error.response.data.message
+        } else {
+          errorMessage = "Noto'g'ri foydalanuvchi nomi yoki parol"
+        }
+      } else if (error.response?.status === 401) {
+        errorMessage = "Avtorizatsiya talab qilinadi"
+      } else if (error.response?.status >= 500) {
+        errorMessage = "Server xatoligi. Iltimos, keyinroq urinib ko'ring"
+      } else if (!error.response) {
+        errorMessage = "Tarmoq xatoligi. Server bilan bog'lanishda muammo"
+      }
+      
       toast({
         title: t("error"),
-        description: error.response?.data?.message || t("loginError"),
+        description: errorMessage,
         variant: "destructive",
       })
     } finally {
