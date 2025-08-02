@@ -105,6 +105,11 @@ api.interceptors.response.use(
         const isVercel = hostname.includes('vercel.app')
         
         if (isVercel) {
+          console.error('🌐 Vercel deployment xatoligi:', {
+            hostname,
+            apiUrl: getApiBaseUrl(),
+            envVar: process.env.NEXT_PUBLIC_API_URL
+          })
           alert('🌐 Vercel deployment xatoligi: API server bilan bog\'lanishda muammo. Iltimos, environment variable sozlamalarini tekshiring.')
         } else {
           alert('Tarmoq xatoligi. API server bilan bog\'lanishda muammo. Iltimos, internet aloqasini tekshiring.')

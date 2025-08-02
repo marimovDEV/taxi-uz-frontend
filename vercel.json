@@ -1,0 +1,10 @@
+{
+  "env": {
+    "NEXT_PUBLIC_API_URL": "http://46.173.29.248/api"
+  },
+  "build": {
+    "env": {
+      "NEXT_PUBLIC_API_URL": "http://46.173.29.248/api"
+    }
+  }
+} 
