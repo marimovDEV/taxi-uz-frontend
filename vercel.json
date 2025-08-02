@@ -6,16 +6,5 @@
     "env": {
       "NEXT_PUBLIC_API_URL": "/api/proxy"
     }
-  },
-  "rewrites": [
-    {
-      "source": "/api/proxy/(.*)",
-      "destination": "http://46.173.29.248/api/$1"
-    }
-  ],
-  "functions": {
-    "api/proxy/**/*.js": {
-      "maxDuration": 30
-    }
   }
 } 
