@@ -15,16 +15,16 @@ const getApiBaseUrl = () => {
   })
   
   // Vercel deployment uchun environment variable (proxy)
-  if (envApiUrl) {
+  if (envApiUrl && envApiUrl !== '/api/proxy') {
     console.log('🌐 Using environment variable API URL:', envApiUrl)
     return envApiUrl
   }
   
-  // Vercel deployment uchun proxy URL ishlatish
+  // Vercel deployment uchun to'g'ridan-to'g'ri API server ga o'tish
   if (isVercel) {
-    const proxyApiUrl = '/api/proxy'
-    console.log('🌐 Vercel deployment uchun Proxy API URL:', proxyApiUrl)
-    return proxyApiUrl
+    const directApiUrl = 'http://46.173.29.248/api'
+    console.log('🌐 Vercel deployment uchun to\'g\'ridan-to\'g\'ri API URL:', directApiUrl)
+    return directApiUrl
   }
   
   // Barcha holatlarda production server ishlatish - localhost ni butunlay olib tashlaymiz
