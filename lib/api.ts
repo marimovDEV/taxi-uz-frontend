@@ -3,20 +3,23 @@ import { logApiError } from './utils'
 
 // API Configuration
 const getApiBaseUrl = () => {
+  // Environment variable ni to'g'ridan-to'g'ri tekshiramiz
+  const envApiUrl = process.env.NEXT_PUBLIC_API_URL
+  console.log('🔍 Environment variable check:', {
+    NEXT_PUBLIC_API_URL: envApiUrl,
+    NODE_ENV: process.env.NODE_ENV,
+    window_location: typeof window !== 'undefined' ? window.location.href : 'server-side'
+  })
+  
   // Vercel deployment uchun environment variable
-  if (process.env.NEXT_PUBLIC_API_URL) {
-    console.log('🌐 Using environment variable API URL:', process.env.NEXT_PUBLIC_API_URL)
-    return process.env.NEXT_PUBLIC_API_URL
+  if (envApiUrl) {
+    console.log('🌐 Using environment variable API URL:', envApiUrl)
+    return envApiUrl
   }
   
   // Barcha holatlarda production server ishlatish - localhost ni butunlay olib tashlaymiz
   const apiUrl = 'http://46.173.29.248/api'
   console.log('🌐 Using production Taxi UZ API server:', apiUrl)
-  console.log('🔍 Environment check:', {
-    NODE_ENV: process.env.NODE_ENV,
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
-    window_location: typeof window !== 'undefined' ? window.location.href : 'server-side'
-  })
   console.log('✅ Production server ishlatilmoqda - localhost emas!')
   return apiUrl
 }
