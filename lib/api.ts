@@ -5,16 +5,26 @@ import { logApiError } from './utils'
 const getApiBaseUrl = () => {
   // Environment variable ni to'g'ridan-to'g'ri tekshiramiz
   const envApiUrl = process.env.NEXT_PUBLIC_API_URL
+  const isVercel = typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')
+  
   console.log('🔍 Environment variable check:', {
     NEXT_PUBLIC_API_URL: envApiUrl,
     NODE_ENV: process.env.NODE_ENV,
-    window_location: typeof window !== 'undefined' ? window.location.href : 'server-side'
+    window_location: typeof window !== 'undefined' ? window.location.href : 'server-side',
+    isVercel
   })
   
   // Vercel deployment uchun environment variable
   if (envApiUrl) {
     console.log('🌐 Using environment variable API URL:', envApiUrl)
     return envApiUrl
+  }
+  
+  // Vercel deployment uchun HTTPS URL ishlatish
+  if (isVercel) {
+    const httpsApiUrl = 'https://46.173.29.248/api'
+    console.log('🌐 Vercel deployment uchun HTTPS API URL:', httpsApiUrl)
+    return httpsApiUrl
   }
   
   // Barcha holatlarda production server ishlatish - localhost ni butunlay olib tashlaymiz
