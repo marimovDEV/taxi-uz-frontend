@@ -1,6 +1,6 @@
 "use client"
 
-import { Car, CreditCard, Package, Settings, BarChart3, Users, Home, LogOut } from "lucide-react"
+import { Car, CreditCard, Package, Settings, BarChart3, Users, Home, LogOut, UserCheck } from "lucide-react"
 import { useRouter, usePathname } from "next/navigation"
 import { useLanguage } from "@/hooks/use-language"
 import { useBranding } from "@/hooks/use-branding"
@@ -33,6 +33,11 @@ export function AppSidebar() {
       title: t("dashboard"),
       url: "/dashboard",
       icon: Home,
+    },
+    {
+      title: t("drivers"),
+      url: "/dashboard/drivers",
+      icon: UserCheck,
     },
     {
       title: t("payments"),

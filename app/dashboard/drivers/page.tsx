@@ -314,6 +314,14 @@ export default function DriversPage() {
   const [categoryFilter, setCategoryFilter] = useState<Driver["direction"] | "all">("all")
   const [ballAmount, setBallAmount] = useState<number>(0)
   const [botToken, setBotToken] = useState<string>(process.env.NEXT_PUBLIC_BOT_TOKEN || '')
+  const [stats, setStats] = useState({
+    total: 0,
+    pending: 0,
+    approved: 0,
+    rejected: 0,
+    taxi: 0,
+    cargo: 0
+  })
 
   useEffect(() => {
     const fetchDrivers = async () => {
@@ -321,8 +329,19 @@ export default function DriversPage() {
         setLoading(true)
         const { results } = await apiService.getDriverApplications()
         setDrivers(results)
+        
+        // Statistika hisoblash
+        const stats = {
+          total: results.length,
+          pending: results.filter(d => d.status === 'pending').length,
+          approved: results.filter(d => d.status === 'approved').length,
+          rejected: results.filter(d => d.status === 'rejected').length,
+          taxi: results.filter(d => d.direction === 'taxi').length,
+          cargo: results.filter(d => d.direction === 'cargo').length
+        }
+        setStats(stats)
       } catch (error) {
-        toast({ title: t("error"), description: t("driversLoadingError"), variant: "destructive" })
+        toast({ title: "Xatolik", description: "Haydovchilar yuklanmadi", variant: "destructive" })
       } finally {
         setLoading(false)
       }
@@ -608,8 +627,67 @@ export default function DriversPage() {
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="space-y-1 sm:space-y-2">
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">{t("driversTitle")}</h1>
-        <p className="text-sm sm:text-base text-muted-foreground">{t("driversDesc")}</p>
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">🚗 Haydovchilar va arizalar</h1>
+        <p className="text-sm sm:text-base text-muted-foreground">
+          Haydovchilik arizasini qoldirgan barcha foydalanuvchilar va ularning holati
+        </p>
+      </div>
+
+      {/* Statistics Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-600">{stats.total}</div>
+              <div className="text-sm text-muted-foreground">Jami arizalar</div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-yellow-600">{stats.pending}</div>
+              <div className="text-sm text-muted-foreground">Kutmoqda</div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-600">{stats.approved}</div>
+              <div className="text-sm text-muted-foreground">Tasdiqlangan</div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-red-600">{stats.rejected}</div>
+              <div className="text-sm text-muted-foreground">Rad etilgan</div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-purple-600">{stats.taxi}</div>
+              <div className="text-sm text-muted-foreground">Taxi</div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-orange-600">{stats.cargo}</div>
+              <div className="text-sm text-muted-foreground">Gruz</div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       <Card className="border-0 shadow-md">
