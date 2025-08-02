@@ -9,7 +9,7 @@ const getApiBaseUrl = () => {
     return process.env.NEXT_PUBLIC_API_URL
   }
   
-  // Barcha holatlarda production server ishlatish
+  // Barcha holatlarda production server ishlatish - localhost ni butunlay olib tashlaymiz
   const apiUrl = 'http://46.173.29.248/api'
   console.log('🌐 Using production Taxi UZ API server:', apiUrl)
   console.log('🔍 Environment check:', {
@@ -17,6 +17,7 @@ const getApiBaseUrl = () => {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     window_location: typeof window !== 'undefined' ? window.location.href : 'server-side'
   })
+  console.log('✅ Production server ishlatilmoqda - localhost emas!')
   return apiUrl
 }
 
