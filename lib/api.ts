@@ -767,7 +767,13 @@ class ApiService {
 
   // Admin Settings - Driver Ratings
   async getDriverRatings(): Promise<DriverRatingData[]> {
-    return this.retryRequest(() => api.get('/admin/driver-ratings/').then(res => res.data))
+    try {
+      return this.retryRequest(() => api.get('/admin/driver-ratings/').then(res => res.data))
+    } catch (error) {
+      // Agar admin endpoint ishlamasa, oddiy ratings endpoint dan foydalanamiz
+      console.log('Admin driver ratings failed, trying regular ratings endpoint')
+      return this.retryRequest(() => api.get('/ratings/').then(res => res.data.results || []))
+    }
   }
 
   // Admin Settings - Group Settings

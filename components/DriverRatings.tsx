@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { useToast } from "@/hooks/use-toast"
 import { useLanguage } from "@/hooks/use-language"
@@ -25,12 +26,30 @@ export default function DriverRatings() {
       setLoading(true)
       const data = await apiService.getDriverRatings()
       setDrivers(data)
-    } catch (error) {
+    } catch (error: any) {
+      console.error('Driver ratings fetch error:', error)
+      
+      // Xatolik turiga qarab xabar berish
+      let errorMessage = "Haydovchilar reytingi yuklanmadi"
+      
+      if (error?.response?.status === 401) {
+        errorMessage = "Authentication kerak. Iltimos, qaytadan tizimga kiring"
+      } else if (error?.response?.status === 403) {
+        errorMessage = "Bu sahifaga kirish huquqi yo'q"
+      } else if (error?.code === 'ECONNABORTED' || error?.message?.includes('timeout')) {
+        errorMessage = "Server bilan bog'lanishda muammo. Iltimos, keyinroq urinib ko'ring"
+      } else if (!error?.response) {
+        errorMessage = "Tarmoq xatoligi. Internet aloqasini tekshiring"
+      }
+      
       toast({
-        title: `❌ ${t("error")}`,
-        description: t("driverRatingsLoadError"),
+        title: "❌ Xatolik",
+        description: errorMessage,
         variant: "destructive"
       })
+      
+      // Bo'sh array qo'yish xatolik bo'lganda
+      setDrivers([])
     } finally {
       setLoading(false)
     }
@@ -74,9 +93,22 @@ export default function DriverRatings() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <RefreshCw className="h-8 w-8 animate-spin" />
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Star className="h-5 w-5" />
+            📊 Haydovchilar reytingi
+          </CardTitle>
+          <CardDescription>
+            🚗 Haydovchilar reytingi yuklanmoqda...
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center h-64">
+            <RefreshCw className="h-8 w-8 animate-spin" />
+          </div>
+        </CardContent>
+      </Card>
     )
   }
 
@@ -94,8 +126,20 @@ export default function DriverRatings() {
       <CardContent>
         <div className="space-y-4">
           {drivers.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              🚫 {t("noDriversYet")}
+            <div className="text-center py-8">
+              <div className="text-muted-foreground mb-4">
+                <Star className="h-12 w-12 mx-auto mb-2 text-gray-300" />
+                <p className="text-lg font-medium">Haydovchilar reytingi mavjud emas</p>
+                <p className="text-sm">Hali hech qanday haydovchi baholanmagan</p>
+              </div>
+              <Button 
+                onClick={fetchDriverRatings} 
+                variant="outline"
+                className="flex items-center gap-2"
+              >
+                <RefreshCw className="h-4 w-4" />
+                Qayta yuklash
+              </Button>
             </div>
           ) : (
             drivers.map((driver) => (
