@@ -8,14 +8,8 @@ const getApiBaseUrl = () => {
     return process.env.NEXT_PUBLIC_API_URL
   }
   
-  // Development uchun local server
-  if (process.env.NODE_ENV === 'development') {
-    console.log('🚀 Development mode: Using local API server')
-    return 'http://localhost:8000/api'
-  }
-  
-  // Production server - fallback
-  console.log('🌐 Production mode: Using production Taxi UZ API server:', 'http://46.173.29.248/api')
+  // Barcha holatlarda production server ishlatish
+  console.log('🌐 Using production Taxi UZ API server:', 'http://46.173.29.248/api')
   return 'http://46.173.29.248/api'
 }
 
@@ -101,10 +95,8 @@ api.interceptors.response.use(
         
         if (isVercel) {
           alert('🌐 Vercel deployment xatoligi: API server bilan bog\'lanishda muammo. Iltimos, environment variable sozlamalarini tekshiring.')
-        } else if (hostname === '172.20.1.49') {
-          alert('Tarmoq xatoligi. Django server 172.20.1.49:8000 da ishlayotganini tekshiring.')
         } else {
-          alert('Tarmoq xatoligi. Django server localhost:8000 da ishlayotganini tekshiring.')
+          alert('Tarmoq xatoligi. API server bilan bog\'lanishda muammo. Iltimos, internet aloqasini tekshiring.')
         }
       }
     }
