@@ -48,6 +48,15 @@ export default function DetailedStatistics() {
     )
   }
 
+  // Safe access to nested properties
+  const users = statistics.users || {}
+  const orders = statistics.orders || {}
+  const payments = statistics.payments || {}
+  const applications = statistics.applications || {}
+  const tickets = statistics.tickets || {}
+  const ratings = statistics.ratings || {}
+  const recentActivity = statistics.recent_activity || {}
+
   return (
     <div className="space-y-6">
       {/* Users Statistics */}
@@ -64,19 +73,19 @@ export default function DetailedStatistics() {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="text-center p-4 border rounded-lg">
-              <div className="text-2xl font-bold text-blue-600">{statistics.users.total}</div>
+              <div className="text-2xl font-bold text-blue-600">{users.total || 0}</div>
               <div className="text-sm text-muted-foreground">Jami foydalanuvchilar</div>
             </div>
             <div className="text-center p-4 border rounded-lg">
-              <div className="text-2xl font-bold text-green-600">{statistics.users.drivers}</div>
+              <div className="text-2xl font-bold text-green-600">{users.drivers || 0}</div>
               <div className="text-sm text-muted-foreground">Haydovchilar</div>
             </div>
             <div className="text-center p-4 border rounded-lg">
-              <div className="text-2xl font-bold text-purple-600">{statistics.users.clients}</div>
+              <div className="text-2xl font-bold text-purple-600">{users.clients || 0}</div>
               <div className="text-sm text-muted-foreground">Mijozlar</div>
             </div>
             <div className="text-center p-4 border rounded-lg">
-              <div className="text-2xl font-bold text-orange-600">{statistics.users.new_month}</div>
+              <div className="text-2xl font-bold text-orange-600">{users.new_month || 0}</div>
               <div className="text-sm text-muted-foreground">Yangi (30 kun)</div>
             </div>
           </div>
@@ -101,19 +110,19 @@ export default function DetailedStatistics() {
               <h3 className="font-medium">Umumiy ma'lumot</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center p-3 border rounded-lg">
-                  <div className="text-xl font-bold">{statistics.orders.total}</div>
+                  <div className="text-xl font-bold">{orders.total || 0}</div>
                   <div className="text-sm text-muted-foreground">Jami buyurtma</div>
                 </div>
                 <div className="text-center p-3 border rounded-lg">
-                  <div className="text-xl font-bold">{statistics.orders.today}</div>
+                  <div className="text-xl font-bold">{orders.today || 0}</div>
                   <div className="text-sm text-muted-foreground">Bugun</div>
                 </div>
                 <div className="text-center p-3 border rounded-lg">
-                  <div className="text-xl font-bold">{statistics.orders.week}</div>
+                  <div className="text-xl font-bold">{orders.week || 0}</div>
                   <div className="text-sm text-muted-foreground">Haftada</div>
                 </div>
                 <div className="text-center p-3 border rounded-lg">
-                  <div className="text-xl font-bold">{statistics.orders.month}</div>
+                  <div className="text-xl font-bold">{orders.month || 0}</div>
                   <div className="text-sm text-muted-foreground">Oyda</div>
                 </div>
               </div>
@@ -128,35 +137,35 @@ export default function DetailedStatistics() {
                     <Car className="h-4 w-4 text-blue-500" />
                     <span>Taxi</span>
                   </div>
-                  <Badge variant="secondary">{statistics.orders.by_category.taxi}</Badge>
+                  <Badge variant="secondary">{orders.by_category?.taxi || 0}</Badge>
                 </div>
                 <div className="flex items-center justify-between p-3 border rounded-lg">
                   <div className="flex items-center gap-2">
                     <Package className="h-4 w-4 text-green-500" />
                     <span>Pochta</span>
                   </div>
-                  <Badge variant="secondary">{statistics.orders.by_category.parcel}</Badge>
+                  <Badge variant="secondary">{orders.by_category?.parcel || 0}</Badge>
                 </div>
                 <div className="flex items-center justify-between p-3 border rounded-lg">
                   <div className="flex items-center gap-2">
                     <Truck className="h-4 w-4 text-orange-500" />
                     <span>Gruz</span>
                   </div>
-                  <Badge variant="secondary">{statistics.orders.by_category.cargo}</Badge>
+                  <Badge variant="secondary">{orders.by_category?.cargo || 0}</Badge>
                 </div>
                 <div className="flex items-center justify-between p-3 border rounded-lg">
                   <div className="flex items-center gap-2">
                     <Plane className="h-4 w-4 text-purple-500" />
                     <span>Avia</span>
                   </div>
-                  <Badge variant="secondary">{statistics.tickets.flight.total}</Badge>
+                  <Badge variant="secondary">{tickets.flight?.total || 0}</Badge>
                 </div>
                 <div className="flex items-center justify-between p-3 border rounded-lg">
                   <div className="flex items-center gap-2">
                     <Train className="h-4 w-4 text-indigo-500" />
                     <span>Poyezd</span>
                   </div>
-                  <Badge variant="secondary">{statistics.tickets.train.total}</Badge>
+                  <Badge variant="secondary">{tickets.train?.total || 0}</Badge>
                 </div>
               </div>
             </div>
@@ -167,15 +176,15 @@ export default function DetailedStatistics() {
             <h3 className="font-medium mb-3">Holat bo'yicha</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="text-center p-3 border rounded-lg">
-                <div className="text-lg font-bold text-yellow-600">{statistics.orders.by_status.pending}</div>
+                <div className="text-lg font-bold text-yellow-600">{orders.by_status?.pending || 0}</div>
                 <div className="text-sm text-muted-foreground">Kutmoqda</div>
               </div>
               <div className="text-center p-3 border rounded-lg">
-                <div className="text-lg font-bold text-green-600">{statistics.orders.by_status.accepted}</div>
+                <div className="text-lg font-bold text-green-600">{orders.by_status?.accepted || 0}</div>
                 <div className="text-sm text-muted-foreground">Qabul qilingan</div>
               </div>
               <div className="text-center p-3 border rounded-lg">
-                <div className="text-lg font-bold text-red-600">{statistics.orders.by_status.cancelled}</div>
+                <div className="text-lg font-bold text-red-600">{orders.by_status?.cancelled || 0}</div>
                 <div className="text-sm text-muted-foreground">Bekor qilingan</div>
               </div>
             </div>
@@ -199,24 +208,24 @@ export default function DetailedStatistics() {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span>Jami to'lovlar:</span>
-                <Badge variant="outline">{statistics.payments.total}</Badge>
+                <Badge variant="outline">{payments.total || 0}</Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span>Kutmoqda:</span>
-                <Badge variant="secondary">{statistics.payments.pending}</Badge>
+                <Badge variant="secondary">{payments.pending || 0}</Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span>Tasdiqlangan:</span>
-                <Badge variant="default" className="bg-green-500">{statistics.payments.approved}</Badge>
+                <Badge variant="default" className="bg-green-500">{payments.approved || 0}</Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span>Rad etilgan:</span>
-                <Badge variant="destructive">{statistics.payments.rejected}</Badge>
+                <Badge variant="destructive">{payments.rejected || 0}</Badge>
               </div>
               <div className="pt-2 border-t">
                 <div className="flex items-center justify-between">
                   <span className="font-medium">Jami to'langan ball:</span>
-                  <span className="text-lg font-bold text-green-600">{statistics.payments.total_balls_paid}</span>
+                  <span className="text-lg font-bold text-green-600">{payments.total_balls_paid || 0}</span>
                 </div>
               </div>
             </div>
@@ -237,19 +246,19 @@ export default function DetailedStatistics() {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span>Jami arizalar:</span>
-                <Badge variant="outline">{statistics.applications.total}</Badge>
+                <Badge variant="outline">{applications.total || 0}</Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span>Kutmoqda:</span>
-                <Badge variant="secondary">{statistics.applications.pending}</Badge>
+                <Badge variant="secondary">{applications.pending || 0}</Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span>Tasdiqlangan:</span>
-                <Badge variant="default" className="bg-green-500">{statistics.applications.approved}</Badge>
+                <Badge variant="default" className="bg-green-500">{applications.approved || 0}</Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span>Rad etilgan:</span>
-                <Badge variant="destructive">{statistics.applications.rejected}</Badge>
+                <Badge variant="destructive">{applications.rejected || 0}</Badge>
               </div>
             </div>
           </CardContent>
@@ -277,22 +286,22 @@ export default function DetailedStatistics() {
                 <h4 className="font-medium mb-2">Avia biletlar</h4>
                 <div className="flex items-center justify-between">
                   <span>Jami:</span>
-                  <Badge variant="outline">{statistics.tickets.flight.total}</Badge>
+                  <Badge variant="outline">{tickets.flight?.total || 0}</Badge>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Kutmoqda:</span>
-                  <Badge variant="secondary">{statistics.tickets.flight.pending}</Badge>
+                  <Badge variant="secondary">{tickets.flight?.pending || 0}</Badge>
                 </div>
               </div>
               <div>
                 <h4 className="font-medium mb-2">Poyezd biletlar</h4>
                 <div className="flex items-center justify-between">
                   <span>Jami:</span>
-                  <Badge variant="outline">{statistics.tickets.train.total}</Badge>
+                  <Badge variant="outline">{tickets.train?.total || 0}</Badge>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Kutmoqda:</span>
-                  <Badge variant="secondary">{statistics.tickets.train.pending}</Badge>
+                  <Badge variant="secondary">{tickets.train?.pending || 0}</Badge>
                 </div>
               </div>
             </div>
@@ -313,12 +322,12 @@ export default function DetailedStatistics() {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span>Jami reytinglar:</span>
-                <Badge variant="outline">{statistics.ratings.total}</Badge>
+                <Badge variant="outline">{ratings.total || 0}</Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span>O'rtacha reyting:</span>
                 <div className="flex items-center gap-2">
-                  <span className="text-lg font-bold text-yellow-600">{statistics.ratings.average}</span>
+                  <span className="text-lg font-bold text-yellow-600">{ratings.average || 0}</span>
                   <Star className="h-4 w-4 text-yellow-500 fill-current" />
                 </div>
               </div>
@@ -341,15 +350,15 @@ export default function DetailedStatistics() {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="text-center p-4 border rounded-lg">
-              <div className="text-2xl font-bold text-blue-600">{statistics.recent_activity.orders}</div>
+              <div className="text-2xl font-bold text-blue-600">{recentActivity.orders || 0}</div>
               <div className="text-sm text-muted-foreground">Yangi buyurtmalar</div>
             </div>
             <div className="text-center p-4 border rounded-lg">
-              <div className="text-2xl font-bold text-green-600">{statistics.recent_activity.payments}</div>
+              <div className="text-2xl font-bold text-green-600">{recentActivity.payments || 0}</div>
               <div className="text-sm text-muted-foreground">To'lov so'rovlari</div>
             </div>
             <div className="text-center p-4 border rounded-lg">
-              <div className="text-2xl font-bold text-purple-600">{statistics.recent_activity.applications}</div>
+              <div className="text-2xl font-bold text-purple-600">{recentActivity.applications || 0}</div>
               <div className="text-sm text-muted-foreground">Haydovchi arizalari</div>
             </div>
           </div>
