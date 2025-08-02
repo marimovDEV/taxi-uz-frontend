@@ -5,12 +5,19 @@ import { logApiError } from './utils'
 const getApiBaseUrl = () => {
   // Vercel deployment uchun environment variable
   if (process.env.NEXT_PUBLIC_API_URL) {
+    console.log('🌐 Using environment variable API URL:', process.env.NEXT_PUBLIC_API_URL)
     return process.env.NEXT_PUBLIC_API_URL
   }
   
   // Barcha holatlarda production server ishlatish
-  console.log('🌐 Using production Taxi UZ API server:', 'http://46.173.29.248/api')
-  return 'http://46.173.29.248/api'
+  const apiUrl = 'http://46.173.29.248/api'
+  console.log('🌐 Using production Taxi UZ API server:', apiUrl)
+  console.log('🔍 Environment check:', {
+    NODE_ENV: process.env.NODE_ENV,
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    window_location: typeof window !== 'undefined' ? window.location.href : 'server-side'
+  })
+  return apiUrl
 }
 
 const API_BASE_URL = getApiBaseUrl()
