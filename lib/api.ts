@@ -7,20 +7,9 @@ const getApiBaseUrl = () => {
     return process.env.NEXT_PUBLIC_API_URL
   }
   
-  // Check if we're on network IP
-  if (typeof window !== 'undefined') {
-    const hostname = window.location.hostname
-    if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
-      // Network access - use the same hostname but port 8000
-      const networkUrl = `http://${hostname}:8000/api`
-      console.log('Using network Django backend API:', networkUrl)
-      return networkUrl
-    }
-  }
-  
-  // Local development
-  console.log('Using local Django backend API:', 'http://127.0.0.1:8000/api')
-  return 'http://127.0.0.1:8000/api'
+  // Production API server
+  console.log('Using production Django backend API:', 'http://46.173.29.248/api')
+  return 'http://46.173.29.248/api'
 }
 
 const API_BASE_URL = getApiBaseUrl()
