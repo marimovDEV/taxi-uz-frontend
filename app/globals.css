@@ -1,0 +1,265 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 1rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 94.1%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    /* Prevent horizontal scroll on mobile */
+    overflow-x: hidden;
+    /* Improve touch scrolling */
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Improve text rendering on mobile */
+  html {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+  }
+  
+  /* Better touch targets for mobile */
+  button, a, input, select, textarea {
+    @apply touch-manipulation;
+  }
+  
+  /* Prevent zoom on input focus on iOS */
+  input, select, textarea {
+    font-size: 16px;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile responsive utilities */
+@layer utilities {
+  .mobile-scroll {
+    @apply overflow-x-auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobile-card {
+    @apply block sm:hidden;
+  }
+
+  .desktop-table {
+    @apply hidden sm:block;
+  }
+
+  .mobile-stack {
+    @apply flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2;
+  }
+  
+  /* Touch-friendly button sizes */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+  
+  /* Mobile-specific spacing */
+  .mobile-padding {
+    @apply px-4 py-3 sm:px-6 sm:py-4;
+  }
+  
+  /* Mobile grid layouts */
+  .mobile-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4;
+  }
+  
+  /* Mobile text sizes */
+  .mobile-text {
+    @apply text-sm sm:text-base;
+  }
+  
+  .mobile-title {
+    @apply text-lg sm:text-xl lg:text-2xl;
+  }
+  
+  /* Mobile card styles */
+  .mobile-card {
+    @apply rounded-lg border-0 shadow-sm sm:shadow-md;
+  }
+  
+  /* Mobile navigation styles */
+  .mobile-nav {
+    @apply fixed bottom-0 left-0 right-0 bg-background border-t z-50 sm:hidden;
+  }
+  
+  /* Mobile sidebar overlay */
+  .mobile-overlay {
+    @apply fixed inset-0 bg-black/50 z-40 sm:hidden;
+  }
+  
+  /* Mobile safe area padding */
+  .safe-area {
+    @apply pb-safe pt-safe;
+  }
+}
+
+/* Custom scrollbar for mobile */
+.mobile-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.mobile-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 2px;
+}
+
+.mobile-scroll::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 2px;
+}
+
+.mobile-scroll::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Mobile-specific animations */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.mobile-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Mobile loading states */
+.mobile-skeleton {
+  @apply animate-pulse bg-gray-200 dark:bg-gray-700 rounded;
+}
+
+/* Mobile touch feedback */
+.touch-feedback {
+  @apply active:scale-95 transition-transform duration-75;
+}
+
+/* Mobile responsive tables */
+.mobile-table {
+  @apply w-full overflow-x-auto;
+}
+
+.mobile-table table {
+  @apply min-w-full;
+}
+
+.mobile-table th,
+.mobile-table td {
+  @apply px-2 py-2 sm:px-4 sm:py-3 text-sm sm:text-base;
+}
+
+/* Mobile responsive charts */
+.mobile-chart {
+  @apply w-full h-48 sm:h-64 lg:h-80;
+}
+
+/* Mobile responsive cards */
+.mobile-responsive-card {
+  @apply p-3 sm:p-4 lg:p-6;
+}
+
+/* Mobile responsive buttons */
+.mobile-button {
+  @apply h-10 px-4 text-sm sm:h-11 sm:px-6 sm:text-base;
+}
+
+/* Mobile responsive inputs */
+.mobile-input {
+  @apply h-10 px-3 text-sm sm:h-11 sm:px-4 sm:text-base;
+}
+
+/* Mobile responsive modals */
+.mobile-modal {
+  @apply w-[95vw] max-w-md mx-auto;
+}
+
+/* Mobile responsive navigation */
+.mobile-nav-item {
+  @apply flex items-center justify-center h-12 w-full text-xs;
+}
+
+/* Mobile responsive sidebar */
+.mobile-sidebar {
+  @apply w-64 sm:w-72 lg:w-80;
+}
+
+/* Mobile responsive header */
+.mobile-header {
+  @apply h-14 sm:h-16 px-3 sm:px-6;
+}
+
+/* Mobile responsive main content */
+.mobile-main {
+  @apply p-3 sm:p-4 lg:p-6;
+}
+
+/* Mobile responsive footer */
+.mobile-footer {
+  @apply p-4 sm:p-6;
+}
