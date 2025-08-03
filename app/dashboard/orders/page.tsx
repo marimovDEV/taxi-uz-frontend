@@ -144,14 +144,14 @@ export default function OrdersPage() {
       <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-          <Input
-            placeholder={t("searchOrders")}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+              <Input
+                placeholder={t("searchOrders")}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10 mobile-input"
-          />
-        </div>
-      </div>
+              />
+            </div>
+          </div>
 
       {/* Service Statistics */}
       <div className="mobile-grid">
@@ -204,14 +204,14 @@ export default function OrdersPage() {
         </Card>
       </div>
 
-      {/* Tabs */}
+          {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-4 mobile-scroll">
           <TabsTrigger value="all" className="mobile-text">{t("all")}</TabsTrigger>
           <TabsTrigger value="taxi" className="mobile-text">{t("taxi")}</TabsTrigger>
           <TabsTrigger value="parcel" className="mobile-text">{t("parcel")}</TabsTrigger>
           <TabsTrigger value="cargo" className="mobile-text">{t("cargo")}</TabsTrigger>
-        </TabsList>
+            </TabsList>
 
         <TabsContent value="all" className="space-y-4">
           <Card className="mobile-card">
@@ -226,8 +226,8 @@ export default function OrdersPage() {
                 </div>
               ) : (
                 <div className="mobile-table">
-                  <Table>
-                    <TableHeader>
+                <Table>
+                  <TableHeader>
                       <TableRow>
                         <TableHead className="mobile-text">{t("service")}</TableHead>
                         <TableHead className="mobile-text">{t("from")}</TableHead>
@@ -265,36 +265,36 @@ export default function OrdersPage() {
                                   <DialogHeader>
                                     <DialogTitle className="mobile-text">{t("orderDetails")}</DialogTitle>
                                   </DialogHeader>
-                                  <div className="space-y-4">
-                                    <div className="grid grid-cols-2 gap-4">
-                                      <div>
+                                      <div className="space-y-4">
+                                        <div className="grid grid-cols-2 gap-4">
+                                          <div>
                                         <Label className="mobile-text">{t("service")}</Label>
                                         <p className="mobile-text font-medium">{getServiceDisplayName(order.category)}</p>
-                                      </div>
-                                      <div>
+                                          </div>
+                                          <div>
                                         <Label className="mobile-text">{t("status")}</Label>
                                         <div className="mt-1">{getStatusBadge(order.status)}</div>
-                                      </div>
-                                    </div>
-                                    <div>
+                                            </div>
+                                          </div>
+                                          <div>
                                       <Label className="mobile-text">{t("from")}</Label>
                                       <p className="mobile-text font-medium">{order.from_location}</p>
-                                    </div>
-                                    <div>
+                                          </div>
+                                          <div>
                                       <Label className="mobile-text">{t("to")}</Label>
                                       <p className="mobile-text font-medium">{order.to_location}</p>
-                                    </div>
+                                          </div>
                                     {order.driver && (
-                                      <div>
+                                          <div>
                                         <Label className="mobile-text">{t("driver")}</Label>
                                         <p className="mobile-text font-medium">{order.driver.full_name}</p>
                                       </div>
                                     )}
-                                    <div>
+                                          <div>
                                       <Label className="mobile-text">{t("createdAt")}</Label>
                                       <p className="mobile-text font-medium">{formatDate(order.created_at)}</p>
-                                    </div>
-                                  </div>
+                                            </div>
+                                          </div>
                                 </DialogContent>
                               </Dialog>
                             </TableCell>
@@ -303,8 +303,8 @@ export default function OrdersPage() {
                       })}
                     </TableBody>
                   </Table>
-                </div>
-              )}
+                                              </div>
+                                            )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -323,7 +323,7 @@ export default function OrdersPage() {
                 {loading ? (
                   <div className="flex items-center justify-center py-8">
                     <Loader2 className="h-8 w-8 animate-spin" />
-                  </div>
+                                        </div>
                 ) : (
                   <div className="mobile-table">
                     <Table>
@@ -356,9 +356,9 @@ export default function OrdersPage() {
                                   <DialogHeader>
                                     <DialogTitle className="mobile-text">{t("orderDetails")}</DialogTitle>
                                   </DialogHeader>
-                                  <div className="space-y-4">
-                                    <div className="grid grid-cols-2 gap-4">
-                                      <div>
+                                    <div className="space-y-4">
+                                      <div className="grid grid-cols-2 gap-4">
+                                        <div>
                                         <Label className="mobile-text">{t("service")}</Label>
                                         <p className="mobile-text font-medium">{getServiceDisplayName(order.category)}</p>
                                       </div>
@@ -366,22 +366,22 @@ export default function OrdersPage() {
                                         <Label className="mobile-text">{t("status")}</Label>
                                         <div className="mt-1">{getStatusBadge(order.status)}</div>
                                       </div>
-                                    </div>
-                                    <div>
+                                        </div>
+                                        <div>
                                       <Label className="mobile-text">{t("from")}</Label>
                                       <p className="mobile-text font-medium">{order.from_location}</p>
-                                    </div>
-                                    <div>
+                                        </div>
+                                        <div>
                                       <Label className="mobile-text">{t("to")}</Label>
                                       <p className="mobile-text font-medium">{order.to_location}</p>
-                                    </div>
+                                              </div>
                                     {order.driver && (
                                       <div>
                                         <Label className="mobile-text">{t("driver")}</Label>
                                         <p className="mobile-text font-medium">{order.driver.full_name}</p>
                                       </div>
                                     )}
-                                    <div>
+                                        <div>
                                       <Label className="mobile-text">{t("createdAt")}</Label>
                                       <p className="mobile-text font-medium">{formatDate(order.created_at)}</p>
                                     </div>
@@ -391,15 +391,15 @@ export default function OrdersPage() {
                             </TableCell>
                           </TableRow>
                         ))}
-                      </TableBody>
-                    </Table>
-                  </div>
+                  </TableBody>
+                </Table>
+              </div>
                 )}
               </CardContent>
             </Card>
-          </TabsContent>
+            </TabsContent>
         ))}
-      </Tabs>
+          </Tabs>
 
       {/* Flight Tickets */}
       <Card className="mobile-card">
